@@ -2,10 +2,10 @@
 
 練習Restful設計風格，完成一套CRUD，使用Postman測試API
 
-查詢所有會員
-GET
-http://localhost:8080/users
-查詢單一會員
+查詢所有會員<br>
+GET<br>
+http://localhost:8080/users<br>
+查詢單一會員<br>
 GET
 http://localhost:8080/user/1
 新增會員

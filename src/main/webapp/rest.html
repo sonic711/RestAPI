@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <div id="input">
+        <ul>所有會員
+            <li v-for="datas in users">
+                ID:{{datas.id}}----NAME:{{datas.name}}----AGE:{{datas.age}}
+            </li>
+        </ul>
+        查詢單一會員 : <input type="text" v-model.number="id">
+        
+        <button @click.prevent="getUser(id)">搜尋</button>
+        <li v-if="!user == ''">
+        ID:{{user.id}}----NAME:{{user.name}}----AGE:{{user.age}}
+        </li>
+        
+        <form action="#">
+        新增會員 : <input type="text" v-model.trim="name" placeholder="name">
+                  <input type="text" v-model.number="age" placeholder="age">
+        
+        <button @click.prevent="addUser(name,age)">新增</button>
+        </form>
+
+        <form action="#">
+            修改會員 : <input type="text" v-model.number="updateID" placeholder="ID">
+                      <input type="text" v-model.trim="updateName" placeholder="name">
+                      <input type="text" v-model.number="updateAge" placeholder="age">
+            
+            <button @click.prevent="updateUser(updateID,updateName,updateAge)">更新</button>
+        </form>
+        刪除會員 : <input type="text" v-model.number="deleteID" placeholder="ID">
+        <button @click.prevent="deleteUser(deleteID)">刪除</button>
+
+    </div>
+
+</head>
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.3/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script>
+
+        var app = new Vue({
+            el: '#input',
+            data: {
+                users:[],
+                user:[],
+                id:'',
+                name:'',
+                age:'',
+                updateID:'',
+                updateName:'',
+                updateAge:'',
+                deleteID:''
+            },
+            methods: {
+                
+                getUser(id){
+                    axios.get('http://localhost:8080/user/'+ id)
+                    .then(res => {
+                        console.log(res.data);
+                        this.user = res.data;
+
+                    })
+                    .catch(err => {
+                        console.log(err.response);
+                        
+                    })
+                },
+                addUser(name,age){
+                    axios.put('http://localhost:8080/save/user',{
+                        name,
+                        age
+                    })
+                    .then(res => {
+                        console.log(res.data);
+                    })
+                    .catch(err => {
+                        console.log(err.response)
+                    })
+                },
+                updateUser(updateID,updateName,updateAge){
+                    axios.patch('http://localhost:8080/update/user/'+ updateID,{
+                        name:updateName,
+                        age:updateAge
+                    })
+                    .then(res => {
+                        console.log(res.data);
+
+                    })
+                    .catch(err => {
+                        console.log(err.response)
+                    })
+                },
+                deleteUser(deleteID){
+                    axios.delete('http://localhost:8080/delete/user/'+ deleteID)
+                    .then(res =>{
+                        console.log(res.data)
+                    })
+                    .catch(err => {
+                        console.log(err.response)
+                    })
+                }
+            },
+            mounted: function () {
+                axios.get('http://localhost:8080/users')
+                    .then(res => {
+                        console.log(res.data);
+                        this.users = res.data;
+
+                    })
+                    .catch(err => {
+                        console.log(err.response);
+                    })
+            }
+        })
+    </script>
+
+</body>
+
+</html>

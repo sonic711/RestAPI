@@ -13,15 +13,18 @@ public class ApiControllers {
     private UserRepo userRepo;
     @GetMapping(value = "/")
     public String getPage(){
+
         return "Hello world!!";
     }
 
     @GetMapping(value="/users")
     public List<User> getUsers(){
+
         return userRepo.findAll();
     }
     @GetMapping(value="/user/{id}")
     public User getUser(@PathVariable Integer id){
+
         return userRepo.findById(id).get();
     }
 
